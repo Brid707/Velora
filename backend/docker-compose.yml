@@ -1,0 +1,29 @@
+services:
+  velora_postgres:
+    image: postgres:16
+    container_name: velora_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: veloradb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - velora_postgres_data:/var/lib/postgresql/data
+    networks:
+      - velora_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d veloradb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  velora_network:
+    name: velora_network
+    driver: bridge
+
+volumes:
+  velora_postgres_data:
+    name: velora_postgres_data
