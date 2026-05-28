@@ -3,7 +3,7 @@ spring.application.name=velora-backend
 server.port=${PORT:8080}
 server.servlet.context-path=/api
 
-spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.url=jdbc:postgresql://pg-bridget-bridmen18-8fa7.g.aivencloud.com:18814/defaultdb?sslmode=require
 spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
 spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
