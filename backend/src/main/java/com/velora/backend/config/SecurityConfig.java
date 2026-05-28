@@ -46,54 +46,48 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-
                 .cors(cors -> {})
-
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
-
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/api/auth/**"
-                        ).permitAll()
+                        // Público
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/cloudinary/**").permitAll()
+                        .requestMatchers("/api/health").permitAll()
+                        .requestMatchers("/health").permitAll()
 
-                        .requestMatchers(
-                                "/api/cloudinary/**"
-                        ).permitAll()
+                        // Lecturas públicas
+                        .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/stories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/reels/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/recommendation/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/recommendations/**").permitAll()
 
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/posts/**"
-                        ).permitAll()
-
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/stories/**"
-                        ).permitAll()
-
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/reels/**"
-                        ).permitAll()
-
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/users/search/**"
-                        ).permitAll()
+                        // Demo: permitir acciones desde Flutter sin bloquear
+                        .requestMatchers("/api/posts/**").permitAll()
+                        .requestMatchers("/api/stories/**").permitAll()
+                        .requestMatchers("/api/reels/**").permitAll()
+                        .requestMatchers("/api/comments/**").permitAll()
+                        .requestMatchers("/api/likes/**").permitAll()
+                        .requestMatchers("/api/reposts/**").permitAll()
+                        .requestMatchers("/api/saved/**").permitAll()
+                        .requestMatchers("/api/follows/**").permitAll()
+                        .requestMatchers("/api/messages/**").permitAll()
+                        .requestMatchers("/api/notifications/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
 
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 )
-
                 .addFilterBefore(
                         jwtFilter,
                         UsernamePasswordAuthenticationFilter.class
