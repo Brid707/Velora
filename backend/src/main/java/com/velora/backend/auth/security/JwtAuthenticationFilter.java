@@ -40,18 +40,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         String method = request.getMethod();
 
-        if (path.startsWith("/api/auth")) return true;
-        if (path.startsWith("/api/cloudinary")) return true;
-        if (path.startsWith("/swagger-ui")) return true;
-        if (path.startsWith("/v3/api-docs")) return true;
+        if (path == null) return false;
 
-        return method.equals(HttpMethod.GET.name()) &&
-                (
-                        path.startsWith("/api/posts/feed")
-                                || path.startsWith("/api/reels")
-                                || path.startsWith("/api/stories")
-                                || path.startsWith("/api/users/search")
-                );
+        // Rutas públicas
+        if (path.startsWith("/api/auth/") || path.equals("/api/auth")) return true;
+        if (path.startsWith("/api/cloudinary/") || path.equals("/api/cloudinary")) return true;
+        if (path.equals("/api/health") || path.equals("/health")) return true;
+        if (path.startsWith("/swagger-ui/") || path.equals("/swagger-ui")) return true;
+        if (path.startsWith("/v3/api-docs/") || path.equals("/v3/api-docs")) return true;
+
+        // Lecturas públicas
+        if (method.equals(HttpMethod.GET.name())) {
+            return path.startsWith("/api/posts")
+                    || path.startsWith("/api/reels")
+                    || path.startsWith("/api/stories")
+                    || path.startsWith("/api/users")
+                    || path.startsWith("/api/recommendation")
+                    || path.startsWith("/api/recommendations");
+        }
+
+        // Demo: permitir acciones sin bloquear por JWT
+        return path.startsWith("/api/posts")
+                || path.startsWith("/api/stories")
+                || path.startsWith("/api/reels")
+                || path.startsWith("/api/comments")
+                || path.startsWith("/api/likes")
+                || path.startsWith("/api/reposts")
+                || path.startsWith("/api/saved")
+                || path.startsWith("/api/follows")
+                || path.startsWith("/api/messages")
+                || path.startsWith("/api/notifications")
+                || path.startsWith("/api/users");
     }
 
     @Override
